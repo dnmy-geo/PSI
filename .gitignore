@@ -1,0 +1,18 @@
+.python/
+.uv-cache/
+server/.venv/
+server/.pytest_cache/
+server/.pytest_tmp/
+**/__pycache__/
+*.pyc
+*.egg-info/
+build/
+.env
+server/.env
+web/dist/
+web/*.tsbuildinfo
+node_modules/
+.npm-cache/
+.doc/
+# 设计与需求文档只保留在本地，不进入仓库
+doc/

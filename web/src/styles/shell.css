@@ -1,0 +1,138 @@
+/* PSI desktop design: calm surfaces, clear hierarchy, compact business controls. */
+:root {
+  --psi-bg: #f4f6f8;
+  --psi-surface: #ffffff;
+  --psi-text: #202733;
+  --psi-muted: #697586;
+  --psi-line: #e5eaf0;
+  --psi-blue: #1668dc;
+  --psi-blue-soft: #e9f0ff;
+  --psi-shadow: 0 1px 2px #18283b08, 0 8px 28px #18283b07;
+}
+* { box-sizing: border-box; }
+body { color: var(--psi-text); background: var(--psi-bg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif; -webkit-font-smoothing: antialiased; }
+button, input, textarea { font: inherit; }
+:focus-visible { outline: 2px solid #4e8bff; outline-offset: 2px; }
+.ant-btn, .ant-input, .ant-input-affix-wrapper, .ant-select-selector, .ant-picker { transition: background-color .16s ease, border-color .16s ease, box-shadow .16s ease, color .16s ease; }
+.ant-btn { font-weight: 550; }
+.ant-btn-primary { box-shadow: none; }
+.ant-btn:not(.ant-btn-primary):not(.ant-btn-link):not(.ant-btn-text) { background: #fff; }
+.ant-btn:not(.ant-btn-primary):not(.ant-btn-link):not(.ant-btn-text):hover { background: #f7f9fc; }
+
+/* Navigation has its own restrained material layer. */
+.psi-app.ant-pro-layout, .psi-app .ant-layout { background: var(--psi-bg); }
+.psi-app .ant-pro-sider { border-right: 1px solid #dfe5ec; background: #f8f9fb !important; }
+.psi-app .ant-pro-sider .ant-layout-sider-children { background: #f8f9fb; }
+.psi-app .ant-pro-sider-logo { padding: 19px 20px 17px; border-bottom: 1px solid var(--psi-line); }
+.psi-app .ant-pro-sider-logo h1 { color: #1f2a3b; font-size: 16px; font-weight: 700; letter-spacing: -.025em; }
+.psi-app .ant-pro-sider-menu { padding: 13px 10px 24px; }
+.psi-app .ant-menu { background: transparent !important; color: #526072; }
+.psi-app .ant-menu-item, .psi-app .ant-menu-submenu-title { min-height: 37px; height: auto; margin: 2px 0; border-radius: 9px; line-height: 37px; }
+.psi-app .ant-menu-item .anticon, .psi-app .ant-menu-submenu-title .anticon { font-size: 16px; }
+.psi-app .ant-menu-submenu-title { color: #364456; font-weight: 600; }
+.psi-app .ant-menu-item-selected { background: var(--psi-blue) !important; color: #fff !important; font-weight: 600; }
+.psi-app .ant-menu-item-selected .anticon { color: #fff !important; }
+.psi-app .ant-menu-item-selected::after { display: none; }
+.psi-app .ant-menu-item:hover, .psi-app .ant-menu-submenu-title:hover { background: #ebeff5 !important; }
+/* 「工作台」菜单项右上角的待审批角标：挂在行上做绝对定位，不挤占菜单文字。 */
+.psi-app .ant-menu-item { position: relative; }
+.psi-app .ant-menu-item .psi-menu-pending .ant-badge { position: absolute; top: 2px; right: 9px; }
+.psi-app .ant-menu-item .psi-menu-pending { display: inline-flex; align-items: center; }
+/* 侧栏折叠后只剩图标，角标没地方放（会压到图标/被裁掉），折叠态就不显示。 */
+.psi-app .ant-layout-sider-collapsed .psi-menu-pending .ant-badge { display: none; }
+.psi-app .ant-pro-layout-header, .psi-app .ant-layout-header { border-bottom: 1px solid #e1e6ec; background: #ffffffd9 !important; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); box-shadow: none; }
+.psi-app .ant-pro-global-header { box-shadow: none; }
+.psi-app .ant-pro-global-header-right { gap: 8px; }
+.psi-app .ant-pro-global-header-right .ant-typography { color: var(--psi-muted); }
+.psi-app .ant-layout-content { min-width: 0; overflow-x: clip; }
+
+/* A brief dock-like settle makes page changes feel responsive. */
+.psi-page-transition { width: 100%; min-width: 0; animation: psi-page-settle 280ms cubic-bezier(.2, .8, .2, 1) both; transform-origin: 50% 12%; }
+@keyframes psi-page-settle {
+  0% { opacity: .72; transform: scale(.972); }
+  65% { opacity: 1; transform: scale(1.008); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .psi-page-transition { animation: none; }
+}
+
+/* Content is deliberately solid so dense tables and forms remain legible. */
+.psi-app .ant-pro-page-container { padding-bottom: 32px; }
+.psi-app .ant-pro-page-container-warp-page-header, .psi-app .ant-page-header { background: transparent; }
+.psi-app .ant-pro-page-container-warp-page-header { padding-top: 6px; }
+.psi-app .ant-pro-page-container-children-container { padding-top: 12px; }
+.psi-app .ant-page-header-heading-title, .psi-app .ant-pro-page-container .ant-page-header-heading-title { color: #1e2938; font-size: 25px; font-weight: 700; letter-spacing: -.035em; }
+.psi-app .ant-card, .psi-app .ant-pro-card { border: 1px solid var(--psi-line); border-radius: 14px; background: var(--psi-surface); box-shadow: var(--psi-shadow); }
+.psi-app .ant-card-head { min-height: 51px; border-bottom-color: var(--psi-line); }
+.psi-app .ant-card-head-title { color: #273343; font-weight: 650; }
+.psi-app .ant-statistic-title { color: var(--psi-muted); font-size: 13px; }
+.psi-app .ant-statistic-content { color: #1d2939; font-size: 28px; font-weight: 650; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
+.psi-app .ant-pro-table { border: 1px solid var(--psi-line); border-radius: 14px; overflow: hidden; background: #fff; box-shadow: var(--psi-shadow); }
+.psi-app .ant-pro-table .ant-pro-card { border: 0; box-shadow: none; }
+.psi-app .ant-pro-table-list-toolbar { padding: 14px 18px; }
+.psi-app .ant-pro-table-list-toolbar-title { color: #273343; font-size: 16px; font-weight: 650; }
+.psi-app .ant-table { font-variant-numeric: tabular-nums; }
+.psi-app .ant-table-thead > tr > th { border-bottom: 1px solid var(--psi-line); background: #f8f9fb; color: #657184; font-size: 12px; font-weight: 650; white-space: nowrap; }
+.psi-app .ant-table-tbody > tr > td { border-bottom-color: #eef1f5; color: #344052; }
+.psi-app .ant-table-tbody > tr:hover > td { background: #f3f7fd !important; }
+.psi-app .ant-table-tbody > tr.ant-table-row-selected > td { background: #eaf1ff; }
+.psi-app .ant-table-pagination { padding-right: 16px; }
+.psi-app .ant-tag { border-radius: 6px; font-weight: 550; }
+.psi-app .ant-descriptions-bordered { border-radius: 10px; overflow: hidden; }
+.psi-app .ant-descriptions-bordered .ant-descriptions-item-label { color: #657184; background: #f8f9fb; }
+.psi-app .ant-tabs .ant-tabs-tab { font-weight: 550; }
+
+/* A filter panel reads as part of the content, with clear field labels. */
+.list-filters { margin-bottom: 16px; padding: 18px 20px 20px; border-color: var(--psi-line); border-radius: 14px; box-shadow: var(--psi-shadow); }
+.list-filters-title { margin-bottom: 16px; padding-left: 0; border-left: 0; color: #273343; font-size: 14px; font-weight: 650; }
+.list-filters-body { gap: 14px 16px; }
+.list-filter-field { color: #5c697a; font-size: 12px; font-weight: 550; }
+.list-filter-actions { min-height: 36px; }
+.ant-modal-content, .ant-drawer-content { border: 1px solid #e4e9ef; box-shadow: 0 22px 70px #1c293a25; }
+.ant-modal-header, .ant-drawer-header { border-bottom-color: var(--psi-line) !important; }
+.ant-modal-title, .ant-drawer-title { color: #243044 !important; font-weight: 650 !important; }
+.ant-form-item-label > label { color: #455366; font-weight: 550; }
+.ant-form-item-explain-error { font-size: 12px; }
+
+/* Sign-in uses the same visual language as the working interface. */
+.login-shell { background: radial-gradient(circle at 12% 8%, #e0eaff 0, transparent 29%), radial-gradient(circle at 93% 92%, #e5eefb 0, transparent 31%), #f3f6fa; color: var(--psi-text); }
+.login-fluid { display: none; }
+.login-layout { width: min(1080px, 100%); min-height: 570px; gap: clamp(40px, 7vw, 108px); }
+.login-brand { color: #263448; font-size: 17px; }
+.login-brand-mark { border: 0; border-radius: 11px; background: linear-gradient(150deg, #5795f8, #2057c2); box-shadow: 0 8px 22px #2563d929; }
+.login-brand-light { color: #687587; opacity: 1; }
+.login-eyebrow { padding: 7px 12px; border-color: #d9e5f8; background: #eef4ff; color: #3263ad; font-size: 12px; letter-spacing: .02em; }
+.login-intro h1 { margin: 24px 0 17px; color: #1f2d41; font-size: clamp(43px, 4.6vw, 62px); line-height: 1.2; letter-spacing: -.045em; }
+.login-intro h1 span { color: #2563d9; }
+.login-intro p { color: #6b788a; font-size: 16px; line-height: 1.75; }
+.login-flow { color: #57677b; }
+.login-flow span { border-color: #dfe6ef; border-radius: 9px; background: #ffffffb8; backdrop-filter: none; }
+.login-flow i { background: #a9b7c8; }
+.login-intro-footer { color: #8995a5; }
+.login-card { border-color: #ffffff; border-radius: 22px; background: #ffffffea; box-shadow: 0 22px 75px #29415c17, 0 1px 3px #29415c0b; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: var(--psi-text); }
+.login-card-top { color: #667486; }
+.login-card-icon { border: 0; background: #e8f0ff; box-shadow: none; color: #2563d9; }
+.login-heading { color: #1f2d41; }
+.login-subtitle { color: #778393; }
+.login-card .ant-form-item-label > label { color: #4b596d; }
+.login-card .ant-input-affix-wrapper, .login-card .ant-input { border-color: #dce3ec; background: #fafbfd; }
+.login-card .ant-input-affix-wrapper .ant-input { background: transparent; }
+.login-card .ant-btn-primary { background: var(--psi-blue); box-shadow: none; }
+.login-card .ant-btn-primary:hover { background: #1258bd; }
+.login-card-footer { border-top-color: var(--psi-line); color: #96a1ae; }
+@media (max-width: 720px) {
+  .psi-app .ant-pro-page-container-children-container { padding: 12px 14px 24px; }
+  .psi-app .ant-page-header-heading-title, .psi-app .ant-pro-page-container .ant-page-header-heading-title { font-size: 21px; }
+  .list-filters { padding: 16px; }
+  .list-filter-field { flex: 1 1 100%; min-width: 0; }
+  .list-filter-actions { width: 100%; }
+  .psi-app .ant-pro-table-list-toolbar-container { flex-wrap: wrap; gap: 8px; }
+  .psi-app .ant-pro-table-list-toolbar-right { width: 100%; justify-content: flex-end; }
+  .login-layout { min-height: 0; }
+  .login-intro h1 { font-size: 34px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+

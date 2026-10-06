@@ -1,0 +1,7 @@
+/* 全局样式入口：按原 style.css 的顺序引入，层叠顺序与原文件保持一致。 */
+@import './base.css';
+@import './shell.css';
+@import './workbench.css';
+@import './business-flow.css';
+@import './editor.css';
+@import './utilities.css';

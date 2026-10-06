@@ -1,0 +1,40 @@
+import { PageContainer } from '@ant-design/pro-components';
+import { resources } from '../configs';
+import { ResourcePage } from '../components/resource';
+import { ApprovalConfigsPage, AuditLogsPage, HistoricalReturnPage, InitializationPage, ItemsPage, PaymentsPage, PermissionsPage, ProductionDocumentPage, ProductionOrdersPage, ProductionPlansPage, StatementPage, StocktakesPage, UsersPage } from './special';
+import { BusinessFlowPage } from './business-flow/BusinessFlowPage';
+import { OrganizationPage } from './organization/OrganizationPage';
+import { InventoryTable } from './inventory/InventoryTable';
+import { Report } from './report/Report';
+import { Workbench, type WorkbenchAccess } from './workbench/Workbench';
+
+export function pageForCode(code: string, title: string, workbenchAccess?: WorkbenchAccess, menuPaths: Record<string, string> = {}) {
+  if (code === 'workbench') return <Workbench access={workbenchAccess ?? { overview: true, tasks: true, alerts: true }} />;
+  if (code === 'business_flow') return <BusinessFlowPage menuPaths={menuPaths} />;
+  if (code === 'inventory.query') return <InventoryTable kind="balances" />;
+  if (code === 'inventory.movements') return <InventoryTable kind="movements" />;
+  if (code === 'system.organization') return <OrganizationPage menuPaths={menuPaths} />;
+  if (code === 'system.users') return <UsersPage />;
+  if (code === 'masterdata.items') return <ItemsPage />;
+  if (code === 'system.initialization') return <InitializationPage />;
+  if (code === 'system.permissions') return <PermissionsPage />;
+  if (code === 'system.approvals') return <ApprovalConfigsPage />;
+  if (code === 'system.audit_logs') return <AuditLogsPage />;
+  if (code === 'production.plans') return <ProductionPlansPage />;
+  if (code === 'production.orders') return <ProductionOrdersPage />;
+  if (code === 'production.issues') return <ProductionDocumentPage kind="issues" />;
+  if (code === 'production.consumptions') return <ProductionDocumentPage kind="consumptions" />;
+  if (code === 'production.receipts') return <ProductionDocumentPage kind="receipts" />;
+  if (code === 'sales.returns') return <HistoricalReturnPage kind="sales" />;
+  if (code === 'purchase.returns') return <HistoricalReturnPage kind="purchase" />;
+  if (code === 'inventory.stocktakes') return <StocktakesPage />;
+  if (code === 'reconciliation.receipts') return <ResourcePage config={resources['reconciliation.receipts']} />;
+  if (code === 'reconciliation.payments') return <PaymentsPage />;
+  if (code === 'reconciliation.customers') return <StatementPage account="customer" />;
+  if (code === 'reconciliation.suppliers') return <StatementPage account="supplier" />;
+  if (code === 'reconciliation.processors') return <StatementPage account="processor" />;
+  if (code === 'reconciliation.month_end') return <StatementPage />;
+  if (code.startsWith('reports.')) return <Report kind={code.split('.')[1]} title={title} />;
+  if (resources[code]) return <ResourcePage key={code} config={resources[code]} />;
+  return <PageContainer title={title}>该菜单尚未配置页面</PageContainer>;
+}

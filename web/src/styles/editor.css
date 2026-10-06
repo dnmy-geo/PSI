@@ -1,0 +1,100 @@
+/* Shared editor for every resource creation and edit flow. */
+.psi-editor-modal .ant-modal-content { padding: 0; overflow: hidden; border: 1px solid #dce5f0; border-radius: 18px; box-shadow: 0 28px 80px #16325530; }
+.psi-editor-modal .ant-modal-header { margin: 0; padding: 23px 30px 21px; border-bottom: 1px solid #e8edf4; background: linear-gradient(110deg, #fff, #f8fbff); }
+.psi-editor-modal .ant-modal-title { color: #20324b; font-size: 20px; font-weight: 720; letter-spacing: -.025em; }
+.psi-editor-modal .ant-modal-body { max-height: min(72vh, 780px); overflow-y: auto; overscroll-behavior: contain; padding: 0 30px 24px; }
+.psi-editor-modal .ant-modal-footer { margin: 0; padding: 15px 30px; border-top: 1px solid #e8edf4; background: #fbfcfe; }
+.psi-editor-modal .ant-modal-footer .ant-btn { min-width: 86px; height: 38px; border-radius: 9px; }
+.psi-editor-modal .ant-modal-footer .ant-btn-primary { background: #1668dc; box-shadow: 0 5px 13px #1668dc2b; }
+.psi-editor-intro { padding: 21px 0 18px; }
+.psi-editor-kicker { color: #4c7bbf; font-size: 10px; font-weight: 750; letter-spacing: .16em; }
+.psi-editor-intro p { margin: 6px 0 0; color: #78879a; font-size: 13px; line-height: 1.55; }
+.psi-editor-section { margin-bottom: 16px; padding: 20px 22px 4px; border: 1px solid #e3eaf2; border-radius: 14px; background: #fff; box-shadow: 0 5px 20px #233c6008; }
+.psi-editor-section-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.psi-editor-step { display: grid; place-items: center; flex: none; width: 34px; height: 34px; border-radius: 10px; background: #eaf2ff; color: #1668dc; font-size: 12px; font-weight: 750; font-variant-numeric: tabular-nums; }
+.psi-editor-section-heading h3 { margin: 0; color: #273a53; font-size: 15px; font-weight: 690; }
+.psi-editor-section-heading p { margin: 2px 0 0; color: #91a0b2; font-size: 11px; }
+/* 整行字段（备注、多选）必须从第 1 列起，若它前面有奇数个普通字段，当前行右半格就会空着
+   （编辑态隐藏了字段时尤其明显）。dense 让后面的普通字段回填这个空档。 */
+.psi-editor-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; grid-auto-flow: row dense; }
+.psi-editor-fields.is-single-column { grid-template-columns: minmax(0, 1fr); }
+/* 一行三个：字段少又要并排（如盘点单的 单号/单据日期/仓库）。 */
+.psi-editor-fields.is-three-column { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.psi-editor-field { min-width: 0; }
+.psi-editor-field:empty, .psi-editor-line-field:empty { display: none; }
+.psi-editor-field.is-wide { grid-column: 1 / -1; }
+.psi-editor-modal .ant-form-item { margin-bottom: 19px; }
+.psi-editor-modal .ant-form-item-label { padding-bottom: 6px; }
+.psi-editor-modal .ant-form-item-label > label { color: #4d5f76; font-size: 12px; font-weight: 650; }
+.psi-editor-modal .ant-input, .psi-editor-modal .ant-input-affix-wrapper, .psi-editor-modal .ant-picker, .psi-editor-modal .ant-select-selector, .psi-editor-modal .ant-input-number { border-color: #d5dfeb; border-radius: 9px; background: #fcfdff; }
+.psi-editor-modal .ant-input, .psi-editor-modal .ant-input-affix-wrapper, .psi-editor-modal .ant-picker, .psi-editor-modal .ant-select-selector, .psi-editor-modal .ant-input-number { min-height: 38px; }
+/* 带清除/前缀图标的输入框多一层包裹；内层 input 若也吃到 min-height，包裹会被撑成 52px 而高于旁边的下拉框。 */
+.psi-editor-modal .ant-input-affix-wrapper .ant-input, .psi-editor-modal .ant-input-outlined .ant-input { min-height: 0; background: transparent; }
+.psi-editor-modal .ant-picker, .psi-editor-modal .ant-input-number { width: 100%; }
+.psi-editor-modal .ant-form-item-explain-error { margin-top: 3px; font-size: 11px; }
+.psi-editor-lines { padding-bottom: 15px; }
+.psi-editor-lines .ant-pro-form-list > .ant-form-item-label { display: none; }
+.psi-editor-lines .ant-pro-form-list-item { margin-bottom: 12px; padding: 16px 16px 0; border: 1px solid #e3eaf3; border-radius: 11px; background: #f9fbfe; }
+/* 明细行：一条明细的字段全部排在同一行，绝不换行；宽度不够时容器横向滚动。
+   用 flex 而不是固定列数的 grid，是因为条件隐藏的字段会 display:none，不会留下空轨道。 */
+/* ProFormList 的包裹层会按内容撑开（实测 866px），不约束住的话溢出发生在列表项那一层，
+   网格自己不会滚动，整行就被弹窗裁掉了。 */
+.psi-editor-lines .ant-pro-form-list-container { min-width: 0; max-width: 100%; }
+.psi-editor-line-grid { display: flex; flex-wrap: nowrap; gap: 0 14px; width: 100%; overflow-x: auto; padding-bottom: 2px; }
+/* 统一最小宽度：空间宽裕时首列靠 flex-grow 更宽，空间紧张时各列一起缩到 140px，
+   正好容纳字段最多的明细（生产领料 5 列），再多才横向滚动。若给首列单独加大 min-width，
+   它会在紧张时把整体顶出去，导致本来放得下的行也要滚动。 */
+.psi-editor-line-field { flex: 1 1 0; min-width: 140px; }
+.psi-editor-line-field:first-child { flex-grow: 1.6; }
+.psi-editor-line-field.is-hidden { display: none; }
+.psi-editor-lines .ant-pro-form-list-creator-button { min-height: 38px; border-color: #b7d0f4; border-radius: 9px; background: #f4f8ff; color: #1668dc; font-weight: 650; }
+.psi-editor-lines .ant-pro-form-list-creator-button:hover { border-color: #1668dc; background: #eaf2ff; }
+.psi-editor-note { padding-bottom: 5px; }
+.psi-editor-note .ant-input { min-height: 88px; }
+@media (max-width: 700px) {
+  .psi-editor-modal { max-width: calc(100vw - 24px); }
+  .psi-editor-modal .ant-modal-header { padding: 20px 18px 16px; }
+  .psi-editor-modal .ant-modal-body { max-height: 72vh; padding: 0 18px 18px; }
+  .psi-editor-modal .ant-modal-footer { padding: 12px 18px; }
+  .psi-editor-section { padding: 17px 16px 2px; }
+  /* 窄屏统一回落单列；三列的类名更具体，必须一起覆盖，否则媒体查询压不住它。 */
+  .psi-editor-fields, .psi-editor-fields.is-three-column { grid-template-columns: minmax(0, 1fr); }
+}
+
+.psi-split-modal .ant-modal-body { padding-bottom: 24px; }
+.psi-split-count { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 20px; }
+.psi-split-count label { color: #4d5f76; font-size: 13px; font-weight: 650; }
+.psi-split-count .ant-input-number-group-wrapper { width: 165px; }
+.psi-split-orders { display: flex; flex-direction: column; gap: 14px; padding-bottom: 8px; }
+.psi-split-order { margin: 0; padding-bottom: 18px; }
+.psi-split-order .psi-editor-section-heading { margin-bottom: 17px; }
+.psi-split-order .psi-editor-section-heading > .ant-btn { margin-left: auto; }
+/* 拆单产出行与盘点录入行同属明细：同样保持单行，不够宽就横向滚动。 */
+.psi-split-outputs { display: flex; flex-direction: column; gap: 10px; overflow-x: auto; }
+.psi-split-output { display: grid; grid-template-columns: minmax(0, 1fr) minmax(135px, 180px) auto; align-items: end; gap: 12px; padding: 13px 14px 0; border: 1px solid #e3eaf3; border-radius: 10px; background: #f9fbfe; min-width: 520px; }
+.psi-split-output > .ant-btn { margin-bottom: 20px; }
+.psi-split-output .ant-input-number, .psi-split-output .ant-select { width: 100%; }
+.psi-split-add { align-self: flex-start; min-height: 36px; border-color: #b7d0f4; border-radius: 9px; background: #f4f8ff; color: #1668dc; font-weight: 650; }
+.psi-split-add:hover { border-color: #1668dc; background: #eaf2ff; }
+.psi-count-line { grid-template-columns: 32px minmax(0, 1fr) minmax(130px, 175px) auto; min-width: 560px; }
+.psi-count-index { align-self: center; margin-bottom: 16px; color: #88a0bd; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+@media (max-width: 700px) {
+  .psi-split-count { align-items: flex-start; flex-direction: column; }
+}
+.psi-conversion-form { margin-top: 24px; padding-bottom: 20px; }
+.psi-conversion-form .ant-input-number { width: 100%; }
+.psi-conversion-form > .ant-btn { min-width: 110px; }
+/* 审批配置：直接在列表里编辑，不再用弹窗。 */
+.approval-hint { margin: 0 0 14px; color: #718094; font-size: 12px; }
+
+.psi-auto-number { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; padding: 12px 17px; border: 1px solid #cddff7; border-radius: 11px; background: #f2f7ff; }
+.psi-auto-number span { color: #607793; font-size: 12px; font-weight: 650; }
+.psi-auto-number strong { color: #165cb9; font-size: 14px; font-weight: 730; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.psi-auto-number small { margin-left: auto; color: #8298b6; font-size: 11px; }
+.psi-editor-lines.is-inline-lines .psi-editor-line-grid { gap: 0 12px; }
+.psi-editor-lines.is-inline-lines .ant-pro-form-list-item { padding-right: 12px; }
+@media (max-width: 900px) {
+  .psi-auto-number { align-items: flex-start; flex-wrap: wrap; }
+  .psi-auto-number small { flex-basis: 100%; margin-left: 0; }
+}
+

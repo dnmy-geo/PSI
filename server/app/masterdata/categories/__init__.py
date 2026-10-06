@@ -1,0 +1,2 @@
+"""Hierarchical item categories."""
+

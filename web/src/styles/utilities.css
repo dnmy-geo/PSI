@@ -1,0 +1,80 @@
+/* 纵向滚动条改为浮层式：始终不占据布局宽度，出现或消失都不会让内容左右跳动，
+   也不会让明细行突然变窄而多出横向滚动。Chrome/Edge 已移除 overflow: overlay，
+   因此把纵向条宽度设为 0；滚轮、触控板、键盘翻页与拖拽滚动均不受影响。
+   ::-webkit-scrollbar 的 width 管纵向条、height 管横向条，所以横向保留 10px，
+   作为「这一行还能横向滚」的提示。
+   注意：::-webkit-scrollbar:vertical 这种写法在本项目 Chromium 上不生效，只能用 width/height 分轴；
+   另外同一元素上不能再写 scrollbar-width，否则 Chrome 会整体忽略 ::-webkit-scrollbar 规则。 */
+*::-webkit-scrollbar { width: 0; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: #cbd8e9; border-radius: 6px; }
+*::-webkit-scrollbar-thumb:hover { background: #a9bcd4; }
+/* Firefox 不支持 ::-webkit-scrollbar，退化为细滚动条（无法做成浮层）。 */
+@supports not selector(::-webkit-scrollbar) {
+  * { scrollbar-width: thin; scrollbar-color: #cbd8e9 transparent; }
+}
+
+/* Organization settings: an identity strip, a two-column body, then reachable system menus. */
+.org-page { display: flex; flex-direction: column; gap: 16px; padding-bottom: 28px; }
+.org-identity { display: flex; align-items: center; gap: 17px; padding: 20px 24px; border: 1px solid #e0e8f2; border-radius: 17px; background: #fff; box-shadow: 0 6px 20px #1d38580a; }
+.org-identity-icon { display: grid; place-items: center; flex: none; width: 48px; height: 48px; border-radius: 14px; background: #eaf2ff; color: #1668dc; font-size: 22px; }
+.org-identity-copy { flex: 1; min-width: 0; }
+.org-identity-eyebrow { color: #5685c9; font-size: 10px; font-weight: 750; letter-spacing: .14em; }
+.org-identity-copy h2 { overflow: hidden; margin: 3px 0 2px; color: #23354e; font-size: 22px; font-weight: 720; letter-spacing: -.04em; text-overflow: ellipsis; white-space: nowrap; }
+.org-identity-copy p { margin: 0; color: #8492a6; font-size: 12px; }
+.org-identity-code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; color: #5c6f8c; }
+.org-status { display: inline-flex; align-items: center; gap: 7px; flex: none; padding: 7px 13px; border: 1px solid #cbe6d6; border-radius: 999px; background: #edf8f1; color: #2f7d52; font-size: 12px; font-weight: 600; }
+.org-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.org-status.is-inactive { border-color: #f0d9d3; background: #fdf3f0; color: #a8523c; }
+.org-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 16px; align-items: start; }
+.org-edit { display: flex; flex-direction: column; gap: 14px; }
+.org-edit .ant-form-item { margin-bottom: 0; }
+.org-edit-hint { display: flex; align-items: center; gap: 7px; min-height: 18px; margin: 0; color: #8b98a9; font-size: 12px; }
+.org-edit-hint.is-dirty { color: #b7791f; }
+.org-edit-actions { display: flex; justify-content: flex-end; gap: 9px; }
+.org-readonly { margin: 0; color: #8b98a9; font-size: 13px; line-height: 1.6; }
+.org-shortcuts-note { color: #9aa7b7; font-size: 11px; font-weight: 400; }
+.org-shortcuts { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 10px; }
+.org-shortcut { display: flex; align-items: center; gap: 11px; min-height: 56px; padding: 11px 15px; border: 1px solid #e2e9f1; border-radius: 11px; background: #fff; color: #42536b; font-size: 13px; font-weight: 650; transition: border-color .16s ease, background-color .16s ease, transform .16s ease; }
+.org-shortcut:hover { transform: translateY(-2px); border-color: #a9c8f3; background: #f7faff; color: #1668dc; }
+.org-shortcut-icon { display: grid; place-items: center; flex: none; width: 30px; height: 30px; border-radius: 9px; background: #f1f5fa; color: #788ba5; font-size: 15px; }
+.org-shortcut:hover .org-shortcut-icon { background: #dbeaff; color: #1668dc; }
+.org-shortcut-arrow { margin-left: auto; color: #b9c5d4; font-size: 11px; }
+.org-shortcuts-empty { margin: 0; color: #98a4b3; font-size: 12px; }
+
+/* Permission grid: every action is a flat click-to-toggle chip instead of a multi-select.
+   The real checkbox stays in the DOM (only visually collapsed) so keyboard and screen
+   readers keep working; the wrapper carries the chip styling and the selected state. */
+.perm-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.perm-hint { margin: 0; color: #718094; font-size: 12px; }
+.perm-cell { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.perm-quick { display: inline-flex; align-items: center; margin-left: auto; padding-left: 10px; border-left: 1px solid #e8edf4; }
+.perm-quick .ant-btn { padding-inline: 7px; font-size: 12px; }
+.perm-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.perm-actions .ant-checkbox-wrapper {
+  position: relative;
+  margin-inline-start: 0;
+  padding: 2px 11px;
+  border: 1px solid #d7e0ec;
+  border-radius: 999px;
+  background: #fff;
+  color: #5c697a;
+  font-size: 12px;
+  line-height: 20px;
+  transition: border-color .16s ease, background-color .16s ease, color .16s ease;
+}
+.perm-actions .ant-checkbox-wrapper:hover { border-color: #a9c8f3; color: #1668dc; }
+.perm-actions .ant-checkbox-wrapper-checked { border-color: #1668dc; background: #eaf2ff; color: #15609c; font-weight: 600; }
+/* 方块隐藏但 input 铺满整块标签：点标签即点 input，Tab 聚焦与读屏都不受影响。 */
+.perm-actions .ant-checkbox { position: absolute; inset: 0; width: auto; height: auto; margin: 0; opacity: 0; }
+/* 键盘聚焦提示。用辉光而非 outline，避免和选中态的边框叠成双线。 */
+.perm-actions .ant-checkbox-wrapper:has(:focus-visible) { border-color: #1668dc; box-shadow: 0 0 0 3px #1668dc2e; }
+.perm-actions .ant-checkbox-wrapper-disabled { background: #f7f8fa; color: #b3bcc9; }
+@media (max-width: 900px) { .org-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 600px) {
+  .org-identity { align-items: flex-start; flex-wrap: wrap; padding: 18px 19px; }
+  .org-identity-copy h2 { font-size: 19px; white-space: normal; }
+  .org-shortcuts { grid-template-columns: minmax(0, 1fr); }
+  .org-edit-actions { justify-content: stretch; }
+  .org-edit-actions .ant-btn { flex: 1; }
+}
